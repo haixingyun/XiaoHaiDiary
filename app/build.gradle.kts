@@ -96,6 +96,8 @@ android {
             // signingConfig = signingConfigs.getByName("common")
             // debug 模式下包名后缀
             applicationIdSuffix = ".debug"
+            buildConfigField("String", "BASE_URL", "\"https://box.dusksnow.top/app/\"")
+            buildConfigField("Boolean", "DEBUG", "true")
         }
 
         // release 构建类型
@@ -111,6 +113,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"https://box.dusksnow.top/app/\"")
+            buildConfigField("Boolean", "DEBUG", "false")
         }
     }
 
@@ -123,6 +127,8 @@ android {
     buildFeatures {
         // 开启 Compose 支持
         compose = true
+        // 开启 BuildConfig 支持
+        buildConfig = true
     }
 }
 
@@ -161,6 +167,15 @@ dependencies {
     implementation(libs.logging.interceptor)
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.no.op)
+
+    // 权限
+    implementation(libs.xxpermissions)
+
+    // toast
+    implementation(libs.toaster)
+
+    // 数据存储
+    implementation(libs.mmkv)
 
     // 日志
     implementation(libs.timber)

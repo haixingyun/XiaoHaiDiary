@@ -4,44 +4,42 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.joker.kit.core.designsystem.theme.AppTheme
+import com.joker.kit.navigation.AppNavHost
+import com.joker.kit.navigation.AppNavigator
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+/**
+ * 应用的主Activity
+ * 使用@AndroidEntryPoint注解标记为Hilt依赖注入的入口点
+ */
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var navigator: AppNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 启动页
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+        // 启用边缘到边缘的显示效果
         enableEdgeToEdge()
+        // 设置Compose内容
         setContent {
+            // 应用主题包装
             AppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                // 设置应用的导航宿主，并传入导航管理器和路由注册器
+                // 这样所有页面都可以通过导航管理器进行导航操作
+                AppNavHost(navigator = navigator)
             }
         }
-    }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AppTheme {
-        Greeting("Android")
+        // 不让启动界面一直显示
+        splashScreen.setKeepOnScreenCondition {
+            false
+        }
     }
 }

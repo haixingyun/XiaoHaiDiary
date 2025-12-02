@@ -8,5 +8,6 @@ package com.joker.kit.feature.main.model
  */
 data class DemoCardInfo(
     val title: String,
-    val description: String
+    val description: String,
+    val route: Any? = null
 )

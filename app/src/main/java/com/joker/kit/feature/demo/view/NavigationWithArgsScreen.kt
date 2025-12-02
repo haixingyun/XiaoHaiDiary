@@ -1,0 +1,72 @@
+package com.joker.kit.feature.demo.view
+
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.joker.kit.core.designsystem.theme.AppTheme
+import com.joker.kit.core.ui.component.scaffold.AppScaffold
+import com.joker.kit.core.ui.component.text.AppText
+import com.joker.kit.feature.demo.viewmodel.NavigationWithArgsViewModel
+
+/**
+ * 带参跳转示例路由
+ */
+@Composable
+internal fun NavigationWithArgsRoute(
+    viewModel: NavigationWithArgsViewModel = hiltViewModel()
+) {
+    NavigationWithArgsScreen(
+        goodsId = viewModel.goodsId,
+        onBackClick = viewModel::navigateBack
+    )
+}
+
+/**
+ * 带参跳转示例界面
+ *
+ * @param onBackClick 返回按钮回调
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+internal fun NavigationWithArgsScreen(
+    goodsId: Long = 0,
+    onBackClick: () -> Unit = {},
+) {
+    AppScaffold(
+        titleText = "带参跳转",
+        onBackClick = onBackClick
+    ) {
+        NavigationWithArgsContent(goodsId = goodsId)
+    }
+}
+
+/**
+ * 带参跳转内容视图
+ */
+@Composable
+private fun NavigationWithArgsContent(goodsId: Long) {
+    AppText(text = "传递的商品ID：$goodsId")
+}
+
+/**
+ * 带参跳转界面浅色主题预览
+ */
+@Preview(showBackground = true)
+@Composable
+private fun NavigationWithArgsPreview() {
+    AppTheme {
+        NavigationWithArgsScreen(goodsId = 1)
+    }
+}
+
+/**
+ * 带参跳转界面深色主题预览
+ */
+@Preview(showBackground = true)
+@Composable
+private fun NavigationWithArgsPreviewDark() {
+    AppTheme(darkTheme = true) {
+        NavigationWithArgsScreen(goodsId = 1)
+    }
+}

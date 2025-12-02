@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.joker.kit.feature.auth.navigation.authGraph
+import com.joker.kit.feature.demo.navigation.demoGraph
 import com.joker.kit.feature.main.navigation.mainGraph
 import com.joker.kit.feature.user.navigation.userGraph
 import com.joker.kit.navigation.routes.MainRoutes
@@ -73,6 +74,7 @@ fun AppNavHost(
             }
         ) {
             mainGraph(navController, this@SharedTransitionLayout)
+            demoGraph(navController, this@SharedTransitionLayout)
             authGraph(navController, this@SharedTransitionLayout)
             userGraph(navController, this@SharedTransitionLayout)
         }

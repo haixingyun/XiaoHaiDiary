@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.clickable
 import com.joker.kit.core.designsystem.theme.AppTheme
 import com.joker.kit.core.designsystem.theme.ShapeMedium
 import com.joker.kit.core.ui.component.text.AppText
@@ -16,14 +17,18 @@ import com.joker.kit.feature.main.model.DemoCardInfo
  *
  * @param info 卡片数据
  * @param modifier 修饰符
+ * @param onClick 点击回调
  */
 @Composable
 fun DemoCard(
     info: DemoCardInfo,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     ListItem(
-        modifier = modifier.clip(ShapeMedium),
+        modifier = modifier
+            .clip(ShapeMedium)
+            .clickable(onClick = onClick),
         headlineContent = {
             AppText(
                 text = info.title,

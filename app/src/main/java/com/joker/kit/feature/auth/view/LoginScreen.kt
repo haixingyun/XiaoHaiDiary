@@ -1,15 +1,18 @@
 package com.joker.kit.feature.auth.view
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.kit.core.designsystem.theme.AppTheme
+import com.joker.kit.core.designsystem.theme.SpacePaddingLarge
+import com.joker.kit.core.ui.component.scaffold.AppScaffold
 import com.joker.kit.core.ui.component.text.AppText
-import com.joker.kit.core.ui.component.text.TextSize
 import com.joker.kit.feature.auth.viewmodel.LoginViewModel
 
 /**
@@ -22,23 +25,31 @@ import com.joker.kit.feature.auth.viewmodel.LoginViewModel
 internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    LoginScreen()
+    LoginScreen(
+        onLoginClick = viewModel::login,
+        onBackClick = viewModel::navigateBack
+    )
 }
 
 /**
  * 登录页面
  *
  * @param onBackClick 返回按钮回调
+ * @param onLoginClick 登录按钮回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoginScreen(
     onBackClick: () -> Unit = {},
+    onLoginClick: () -> Unit = {},
 ) {
-    Scaffold { innerPadding ->
+    AppScaffold(
+        titleText = "登录",
+        onBackClick = onBackClick,
+    ) {
         LoginContentView(
-            modifier = Modifier.padding(innerPadding)
+            onLoginClick = onLoginClick
         )
     }
 }
@@ -46,16 +57,23 @@ internal fun LoginScreen(
 /**
  * 登录页面内容
  *
- * @param modifier 修饰符
+ * @param onLoginClick 登录按钮回调
  * @author Joker.X
  */
 @Composable
-private fun LoginContentView(modifier: Modifier = Modifier) {
-    AppText(
-        text = "登录页面",
-        size = TextSize.TITLE_MEDIUM,
-        modifier = modifier
-    )
+private fun LoginContentView(
+    onLoginClick: () -> Unit = {},
+) {
+    Column(
+        modifier = Modifier.padding(SpacePaddingLarge),
+    ) {
+        Button(
+            onClick = onLoginClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            AppText(text = "一键登录")
+        }
+    }
 }
 
 /**

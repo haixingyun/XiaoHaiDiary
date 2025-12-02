@@ -44,7 +44,6 @@ import com.joker.kit.core.ui.component.text.TextType
  * @param state 当前加载状态，默认为可上拉加载状态
  * @param listState LazyList的状态，用于自动滚动到底部，可为空
  * @param onRetry 加载失败时的重试回调，为空时不可点击重试
- * @author Joker.X
  */
 @Composable
 fun LoadMore(
@@ -63,20 +62,28 @@ fun LoadMore(
         when (state) {
             // 可上拉加载更多状态：显示提示文本
             LoadMoreState.PullToLoad -> {
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
                 AppText(
                     text = stringResource(R.string.load_more_pull),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     type = TextType.SECONDARY
                 )
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
             }
 
             // 加载中状态：显示加载动画和提示文本
             LoadMoreState.Loading -> {
-                MiLoadingWeb() // 显示加载动画
+                // 显示加载动画
+                MiLoadingWeb(
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                    borderWidth = 2.dp,
+                    loadingSize = 12.dp
+                )
                 Spacer(modifier = Modifier.width(8.dp))
-                AppText(text = stringResource(R.string.load_more_loading))
+                AppText(
+                    text = stringResource(R.string.load_more_loading),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 // 如果提供了列表状态，自动滚动到底部
                 if (listState != null) {
                     LaunchedEffect(Unit) {
@@ -87,17 +94,18 @@ fun LoadMore(
 
             // 加载成功状态：显示加载成功提示
             LoadMoreState.Success -> {
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
                 AppText(
                     text = stringResource(R.string.load_more_success),
-                    modifier = Modifier.padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
             }
 
             // 加载失败状态：显示错误提示和分割线
             LoadMoreState.Error -> {
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
                 if (onRetry != null) {
                     AppText(
                         text = stringResource(R.string.load_more_error_retry),
@@ -115,34 +123,39 @@ fun LoadMore(
                         type = TextType.ERROR
                     )
                 }
-                Divider(modifier = Modifier.weight(1f))
+                LoadMoreDivider(modifier = Modifier.weight(1f))
             }
 
             // 没有更多数据状态：显示分割线和中间的圆点
             LoadMoreState.NoMore -> {
                 // 左侧分割线
-                Divider(
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)
-                )
+                LoadMoreDivider(modifier = Modifier.weight(1f))
                 // 中间圆点
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
                         .size(4.dp)
                         .background(
-                            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
                             CircleShape
                         )
                 )
                 // 右侧分割线
-                Divider(
-                    modifier = Modifier.weight(1f),
-                    color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)
-                )
+                LoadMoreDivider(modifier = Modifier.weight(1f))
             }
         }
     }
+}
+
+/**
+ * 加载更多分割线
+ */
+@Composable
+private fun LoadMoreDivider(modifier: Modifier = Modifier) {
+    Divider(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+    )
 }
 
 /**
@@ -154,7 +167,9 @@ fun LoadMore(
 @Composable
 private fun OrderLoadMorePreview() {
     AppTheme {
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
             // 可上拉加载更多状态预览
             LoadMore(state = LoadMoreState.PullToLoad)
             Spacer(modifier = Modifier.height(8.dp))
@@ -193,7 +208,9 @@ private fun OrderLoadMorePreview() {
 @Composable
 private fun OrderLoadMorePreviewDark() {
     AppTheme(darkTheme = true) {
-        Column {
+        Column(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
             // 可上拉加载更多状态预览
             LoadMore(state = LoadMoreState.PullToLoad)
             Spacer(modifier = Modifier.height(8.dp))
@@ -221,4 +238,4 @@ private fun OrderLoadMorePreviewDark() {
             LoadMore(state = LoadMoreState.NoMore)
         }
     }
-} 
+}

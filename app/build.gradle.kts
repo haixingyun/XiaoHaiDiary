@@ -97,7 +97,7 @@ android {
             // debug 模式下包名后缀
             applicationIdSuffix = ".debug"
             // debug 模式下的请求 url 地址
-            buildConfigField("String", "BASE_URL", "\"https://box.dusksnow.top/app/\"")
+            buildConfigField("String", "BASE_URL", "\"https://mall.dusksnow.top/app/\"")
             // 根据当前构建类型是否为 debug 模式来判断是否开启 debug 模式
             buildConfigField("Boolean", "DEBUG", "true")
         }
@@ -111,7 +111,7 @@ android {
             // 正式发布模式下的签名配置（配置完 common 签名配置后，取消注释以下行）
             // signingConfig = signingConfigs.getByName("common")
             // 正式发布模式下的请求 url 地址
-            buildConfigField("String", "BASE_URL", "\"https://box.dusksnow.top/app/\"")
+            buildConfigField("String", "BASE_URL", "\"https://mall.dusksnow.top/app/\"")
             // 根据当前构建类型是否为 debug 模式来判断是否开启 debug 模式
             buildConfigField("Boolean", "DEBUG", "false")
             // 混淆规则文件

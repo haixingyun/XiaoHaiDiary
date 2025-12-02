@@ -19,10 +19,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.joker.kit.core.designsystem.theme.AppTheme
 import com.joker.kit.core.ui.component.text.AppText
 import com.joker.kit.core.ui.component.text.TextSize
@@ -38,12 +40,14 @@ import com.joker.kit.feature.main.viewmodel.MainViewModel
  */
 @Composable
 internal fun MainRoute(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     MainScreen(
         uiState = uiState,
-        onTabSelected = viewModel::selectTab
+        onTabSelected = viewModel::selectTab,
+        navController = navController
     )
 }
 
@@ -57,12 +61,14 @@ internal fun MainRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen(
-    uiState: MainUiState,
+    uiState: MainUiState = MainUiState(),
     onTabSelected: (MainTab) -> Unit,
+    navController: NavController = NavController(LocalContext.current)
 ) {
     MainScreenContent(
         uiState = uiState,
-        onTabSelected = onTabSelected
+        onTabSelected = onTabSelected,
+        navController = navController
     )
 }
 
@@ -73,7 +79,8 @@ internal fun MainScreen(
 @Composable
 private fun MainScreenContent(
     uiState: MainUiState,
-    onTabSelected: (MainTab) -> Unit
+    onTabSelected: (MainTab) -> Unit,
+    navController: NavController
 ) {
     val pagerState = rememberPagerState(pageCount = { MainTab.allTabs.size })
     val currentPage = pagerState.currentPage
@@ -109,7 +116,9 @@ private fun MainScreenContent(
         ) { page ->
             when (MainTab.fromIndex(page)) {
                 MainTab.Core -> CoreDemoRoute()
-                MainTab.Navigation -> NavigationDemoRoute()
+                MainTab.Navigation -> NavigationDemoRoute(
+                    navController = navController
+                )
             }
         }
     }
@@ -160,7 +169,7 @@ internal fun MainScreenPreview() {
     AppTheme {
         MainScreen(
             uiState = MainUiState(),
-            onTabSelected = {}
+            onTabSelected = {},
         )
     }
 }

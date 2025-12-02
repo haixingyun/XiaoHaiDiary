@@ -3,6 +3,7 @@ package com.joker.kit.feature.main.navigation
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.joker.kit.feature.main.view.MainRoute
 import com.joker.kit.navigation.routes.MainRoutes
@@ -14,8 +15,11 @@ import com.joker.kit.navigation.routes.MainRoutes
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-fun NavGraphBuilder.mainScreen(sharedTransitionScope: SharedTransitionScope) {
+fun NavGraphBuilder.mainScreen(
+    navController: NavHostController,
+    sharedTransitionScope: SharedTransitionScope
+) {
     composable<MainRoutes.Main> {
-        MainRoute()
+        MainRoute(navController = navController)
     }
 }

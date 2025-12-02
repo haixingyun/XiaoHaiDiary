@@ -18,5 +18,5 @@ fun NavGraphBuilder.mainGraph(
     sharedTransitionScope: SharedTransitionScope
 ) {
     // 只调用页面级导航函数，不包含其他逻辑
-    mainScreen(sharedTransitionScope)
+     mainScreen(navController, sharedTransitionScope)
 }

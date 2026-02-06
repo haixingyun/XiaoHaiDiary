@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joker.kit.core.database.AppDatabase
 import com.joker.kit.core.database.dao.DemoDao
+import com.joker.kit.core.database.dao.TaskDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +53,13 @@ object DatabaseModule {
     fun provideDemoDao(database: AppDatabase): DemoDao {
         return database.demoDao()
     }
+
+    /**
+     * 提供 任务 DAO
+     *
+     * @param database Room 数据库
+     * @return Task DAO
+     */
+    @Provides @Singleton
+    fun provideCartDao(database: AppDatabase): TaskDao = database.taskDao()     // Hilt 提供 CartDao
 }

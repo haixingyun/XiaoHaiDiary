@@ -1,5 +1,7 @@
 package com.joker.kit.feature.main.viewmodel
 
+import androidx.annotation.DrawableRes
+import com.joker.kit.R
 import com.joker.kit.core.base.viewmodel.BaseViewModel
 import com.joker.kit.core.state.UserState
 import com.joker.kit.navigation.AppNavigator
@@ -47,7 +49,7 @@ class MainViewModel @Inject constructor(
  * @author Joker.X
  */
 data class MainUiState(
-    val currentTab: MainTab = MainTab.Core
+    val currentTab: MainTab = MainTab.Home
 )
 
 /**
@@ -56,9 +58,17 @@ data class MainUiState(
  * @param title Tab 标题
  * @author Joker.X
  */
-enum class MainTab(val title: String) {
-    Core("Core"),
-    Navigation("Navigation");
+enum class MainTab(
+    val title: String,
+    @DrawableRes  val icon:  Int,
+) {
+
+    Home("Home",R.drawable.ic_diary),
+
+    Todo("ToDo",R.drawable.ic_todo),
+
+    My("My",R.drawable.ic_my);
+
 
     val index: Int get() = ordinal
 
@@ -73,7 +83,7 @@ enum class MainTab(val title: String) {
          * @author Joker.X
          */
         fun fromIndex(index: Int): MainTab {
-            return allTabs.getOrElse(index) { Core }
+            return allTabs.getOrElse(index) { Home }
         }
     }
 }

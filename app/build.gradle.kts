@@ -26,7 +26,7 @@ android {
 
     defaultConfig {
         // 最终安装包 ID
-        applicationId = "com.joker.kit"
+        applicationId = "com.xiaohai.kit"
         // 支持的最低 Android 版本
         minSdk = 23
         // Play 建议的目标 Android 版本
@@ -34,7 +34,7 @@ android {
         // 递增的内部版本号
         versionCode = 1
         // 显示给用户的版本名称
-        versionName = "1.0.0"
+        versionName = "9.9.9"
 
         // Instrumentation 测试入口
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -157,6 +157,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.compose.material.icons)
 
     // 导航组件
     implementation(libs.navigation.compose)

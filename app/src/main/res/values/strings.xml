@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidProject-Compose</string>
+    <string name="app_name">小海笔记</string>
 
     <!-- Empty States -->
     <string name="empty_cart_btn">去逛逛</string>
@@ -10,6 +10,7 @@
     <string name="empty_network">网络连接失败</string>
     <string name="empty_network_subtitle">请检查网络连接后重试</string>
     <string name="click_retry">重新加载</string>
+    <string name="empty_task_data" translatable="false">你还没有任务！</string>
 
     <!-- Loading States -->
     <string name="loading">加载中…</string>

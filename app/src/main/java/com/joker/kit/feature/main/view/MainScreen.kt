@@ -4,28 +4,41 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.kit.core.designsystem.theme.AppTheme
+import com.joker.kit.core.designsystem.theme.BgContentLight
+import com.joker.kit.core.ui.component.divider.Divider
 import com.joker.kit.core.ui.component.text.AppText
 import com.joker.kit.core.ui.component.text.TextSize
 import com.joker.kit.feature.main.viewmodel.MainTab
@@ -40,14 +53,11 @@ import com.joker.kit.feature.main.viewmodel.MainViewModel
  */
 @Composable
 internal fun MainRoute(
-    viewModel: MainViewModel = hiltViewModel(),
-    navController: NavController
+    viewModel: MainViewModel = hiltViewModel(), navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     MainScreen(
-        uiState = uiState,
-        onTabSelected = viewModel::selectTab,
-        navController = navController
+        uiState = uiState, onTabSelected = viewModel::selectTab, navController = navController
     )
 }
 
@@ -66,9 +76,7 @@ internal fun MainScreen(
     navController: NavController = NavController(LocalContext.current)
 ) {
     MainScreenContent(
-        uiState = uiState,
-        onTabSelected = onTabSelected,
-        navController = navController
+        uiState = uiState, onTabSelected = onTabSelected, navController = navController
     )
 }
 
@@ -83,9 +91,7 @@ internal fun MainScreen(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun MainScreenContent(
-    uiState: MainUiState,
-    onTabSelected: (MainTab) -> Unit,
-    navController: NavController
+    uiState: MainUiState, onTabSelected: (MainTab) -> Unit, navController: NavController
 ) {
     val pagerState = rememberPagerState(pageCount = { MainTab.allTabs.size })
     val currentPage = pagerState.currentPage
@@ -93,7 +99,7 @@ private fun MainScreenContent(
     LaunchedEffect(uiState.currentTab) {
         val targetPage = uiState.currentTab.index
         if (pagerState.currentPage != targetPage) {
-            pagerState.animateScrollToPage(targetPage)
+            pagerState.scrollToPage(targetPage)
         }
     }
 
@@ -105,6 +111,11 @@ private fun MainScreenContent(
     }
 
     Scaffold(
+        // 排除系统导航栏
+        contentWindowInsets = ScaffoldDefaults
+            .contentWindowInsets
+            .exclude(WindowInsets.statusBars)
+        ,
         bottomBar = {
             MainBottomBar(
                 tabs = MainTab.allTabs,
@@ -114,16 +125,14 @@ private fun MainScreenContent(
         }
     ) { innerPadding ->
         HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
+            state = pagerState, modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) { page ->
             when (MainTab.fromIndex(page)) {
-                MainTab.Core -> CoreDemoRoute()
-                MainTab.Navigation -> NavigationDemoRoute(
-                    navController = navController
-                )
+                MainTab.Home -> HomeRoute()
+                MainTab.Todo -> ToDoRoute()
+                MainTab.My -> MyRoute()
             }
         }
     }
@@ -139,33 +148,51 @@ private fun MainScreenContent(
  */
 @Composable
 private fun MainBottomBar(
-    tabs: List<MainTab>,
-    currentTab: MainTab,
-    onTabSelected: (MainTab) -> Unit
+    tabs: List<MainTab>, currentTab: MainTab, onTabSelected: (MainTab) -> Unit
 ) {
-    Row(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
+            .background(BgContentLight)
             .navigationBarsPadding()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        tabs.forEach { tab ->
-            val selected = tab == currentTab
-            AppText(
-                text = tab.title,
-                size = TextSize.BODY_MEDIUM,
-                color = if (selected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .weight(1f)
-                    .clickable { onTabSelected(tab) }
-                    .padding(vertical = 10.dp)
-            )
+        Divider(color = Color.Red)
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            tabs.forEach { tab ->
+                val selected = tab == currentTab
+                val color = if (selected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 10.dp)
+                        .clickable {
+                            onTabSelected(tab)
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Icon(
+                        painter = painterResource(tab.icon),
+                        contentDescription = tab.title,
+                        tint = color
+                    )
+                    AppText(
+                        text = tab.title,
+                        size = TextSize.BODY_MEDIUM,
+                        color = color,
+                    )
+                }
+
+            }
         }
     }
+
 }
 
 /**
@@ -194,8 +221,6 @@ internal fun MainScreenPreview() {
 internal fun MainScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         MainScreen(
-            uiState = MainUiState(),
-            onTabSelected = {}
-        )
+            uiState = MainUiState(), onTabSelected = {})
     }
 }

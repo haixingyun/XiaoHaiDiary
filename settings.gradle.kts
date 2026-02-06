@@ -23,5 +23,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AndroidProject-Compose"
+rootProject.name = "XiaoHaiDiary"
 include(":app")

@@ -143,7 +143,8 @@ val TextQuaternaryDark = Color(0xFF5E5E5E) // 深色模式下的四级文字
  * 浅色模式下页面背景色：#F1F4FA
  * 适用场景：应用整体背景、页面底色
  */
-val BgGreyLight = Color(0xFFF1F4FA) // 页面背景底色
+val BgGreyLight = Color(0xFFF7F7F7) // 页面背景底色
+
 
 /**
  * 浅色模式下白色背景：#FFFFFF
@@ -304,3 +305,8 @@ val GradientRedStart = Color(0xFFFD8C8C) // 红色渐变起点
  * 适用场景：与红色渐变起点配合使用，用于警告类渐变效果
  */
 val GradientRedEnd = Color(0xFFFF2B2B) // 红色渐变终点
+
+/**
+ * 悬浮按钮背景色：#FFBC13
+ */
+val BgFloatingActionButton = Color(0xFFFFBC13)
